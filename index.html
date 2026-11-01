@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Student Form</title>
+</head>
+<body>
+
+Name <input type="text" id="name"><br><br>
+
+Gender
+<input type="radio" name="gender" value="M"> M
+<input type="radio" name="gender" value="F"> F
+<br><br>
+
+Course<br>
+<input type="checkbox" value="HNDIT" class="course"> HNDIT<br>
+<input type="checkbox" value="HNDA" class="course"> HNDA<br>
+<input type="checkbox" value="HNDE" class="course"> HNDE<br><br>
+
+<table border="1" cellpadding="5">
+<tr><th>Subject</th><th>Marks</th><th>Grade</th></tr>
+<tr><td>ML</td><td><input type="number" id="ml"></td><td><input type="text" id="mlg" readonly></td></tr>
+<tr><td>CN</td><td><input type="number" id="cn"></td><td><input type="text" id="cng" readonly></td></tr>
+<tr><td>EA</td><td><input type="number" id="ea"></td><td><input type="text" id="eag" readonly></td></tr>
+</table>
+<br>
+Average <input type="text" id="avg" readonly>
+<br><br>
+
+
+
+<button onclick="calculateAverage()">Click</button>
+<button onclick="goToSummary()">Submit</button>
+
+<script>
+function getGrade(m){
+ m = Number(m);
+ if(m > 80) return 'A';
+ if(m >= 60) return 'B';
+ if(m >= 40) return 'C';
+ return 'D';
+}
+
+function calculateAverage(){
+ var ml = document.getElementById('ml').value;
+ var cn = document.getElementById('cn').value;
+ var ea = document.getElementById('ea').value;
+
+ if(ml=='' || cn=='' || ea==''){
+   alert('Enter all marks');
+   return;
+ }
+
+ document.getElementById('mlg').value = getGrade(ml);
+ document.getElementById('cng').value = getGrade(cn);
+ document.getElementById('eag').value = getGrade(ea);
+
+ var average = (Number(ml) + Number(cn) + Number(ea)) / 3;
+ document.getElementById('avg').value = average.toFixed(2);
+}
+
+function goToSummary(){
+ var name = document.getElementById('name').value;
+ var gender = document.querySelector('input[name="gender"]:checked');
+ var avg = document.getElementById('avg').value;
+
+ if(name=='' || !gender || avg==''){
+   alert('Name, Gender fill pannittu Click button press pannu');
+   return;
+ }
+
+ var courses = document.querySelectorAll('.course:checked');
+ var courseText = '';
+ for(var i=0; i<courses.length; i++){
+   courseText += courses[i].value + ' ';
+ }
+
+ var data = {
+   name: name,
+   gender: gender.value,
+   course: courseText,
+   ml: document.getElementById('ml').value,
+   mlg: document.getElementById('mlg').value,
+   cn: document.getElementById('cn').value,
+   cng: document.getElementById('cng').value,
+   ea: document.getElementById('ea').value,
+   eag: document.getElementById('eag').value,
+   avg: avg
+ };
+
+ localStorage.setItem('student', JSON.stringify(data));
+ window.location.href = 'summary.html';
+}
+</script>
+
+</body>
+</html>
